@@ -1,1 +1,62 @@
+@@ -3,7 +3,7 @@
+import cv2
+import os
 
+
+import os.path
+# counting the numbers
+
+
+@@ -61,11 +61,19 @@ def takeImages():
+        cam.release()
+        cv2.destroyAllWindows()
+        res = "Images Saved for ID : " + Id + " Name : " + name
+        header=["Id", "Name"]
+        row = [Id, name]
+        with open("StudentDetails"+os.sep+"StudentDetails.csv", 'a+') as csvFile:
+            writer = csv.writer(csvFile)
+            writer.writerow(row)
+        csvFile.close()
+        if(os.path.isfile("StudentDetails"+os.sep+"StudentDetails.csv")):
+            with open("StudentDetails"+os.sep+"StudentDetails.csv", 'a+') as csvFile:
+                writer = csv.writer(csvFile)
+                writer.writerow(j for j in row)
+            csvFile.close()
+        else:
+            with open("StudentDetails"+os.sep+"StudentDetails.csv", 'a+') as csvFile:
+                writer = csv.writer(csvFile)
+                writer.writerow(i for i in header)
+                writer.writerow(j for j in row)
+            csvFile.close()
+    else:
+        if(is_number(Id)):
+            print("Enter Alphabetical Name")
+  6 changes: 3 additions & 3 deletions6  
+FRAS/Recognize.py
+@@ -9,7 +9,7 @@
+#-------------------------
+def recognize_attendence():
+    recognizer = cv2.face.LBPHFaceRecognizer_create()  # cv2.createLBPHFaceRecognizer()
+    recognizer.read("TrainingImageLabel"+os.sep+"Trainner.yml")
+    recognizer.read("./TrainingImageLabel/Trainner.yml")
+    harcascadePath = "haarcascade_frontalface_default.xml"
+    faceCascade = cv2.CascadeClassifier(harcascadePath)
+    df = pd.read_csv("StudentDetails"+os.sep+"StudentDetails.csv")
+@@ -18,15 +18,15 @@ def recognize_attendence():
+    attendance = pd.DataFrame(columns=col_names)
+
+    # Initialize and start realtime video capture
+    cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cam = cv2.VideoCapture(0)
+    cam.set(3, 640)  # set video width
+    cam.set(4, 480)  # set video height
+    # Define min window size to be recognized as a face
+    minW = 0.1 * cam.get(3)
+    minH = 0.1 * cam.get(4)
+
+    while True:
+        ret, im = cam.read()
+        _,im = cam.read()
+        gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+        faces = faceCascade.detectMultiScale(gray, 1.2, 5,minSize = (int(minW), int(minH)),flags = cv2.CASCADE_SCALE_IMAGE)
+        for(x, y, w, h) in faces:
